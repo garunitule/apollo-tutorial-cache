@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   ApolloClient,
   InMemoryCache,
+  ApolloProvider,
 } from '@apollo/client';
 import { gql } from '@apollo/client';
 import './index.css';
@@ -13,32 +14,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-client
-  .query({
-    query: gql`
-      query user{
-        user(id: 2) {
-          id,
-          name,
-          posts {
-            id,
-            user_id,
-            title,
-            comments {
-              id,
-              post_id,
-              reply,
-            }
-          }
-        }
-      }
-    `
-  })
-  .then(result => console.log(result));
-
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

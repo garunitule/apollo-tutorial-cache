@@ -1,8 +1,41 @@
-import React from 'react';
+import {
+  useQuery,
+  gql,
+} from '@apollo/client';
 import logo from './logo.svg';
 import './App.css';
 
+const GET_USER_POST_COMMENT = gql`
+  query user{
+    user(id: 2) {
+      id,
+      name,
+      posts {
+        id,
+        user_id,
+        title,
+        comments {
+          id,
+          post_id,
+          reply,
+        }
+      }
+    }
+  }
+`;
+
 function App() {
+  const { loading, error, data } = useQuery(GET_USER_POST_COMMENT);
+  console.log(data);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error...</p>;
+  }
+
   return (
     <div className="App">
       <header className="App-header">
