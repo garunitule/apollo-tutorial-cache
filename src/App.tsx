@@ -6,8 +6,8 @@ import logo from './logo.svg';
 import './App.css';
 
 const GET_USER_POST_COMMENT = gql`
-  query user{
-    user(id: 2) {
+  query user($id: ID!){
+    user(id: $id) {
       id,
       name,
       posts {
@@ -25,16 +25,21 @@ const GET_USER_POST_COMMENT = gql`
 `;
 
 function App() {
-  const { loading, error, data } = useQuery(GET_USER_POST_COMMENT);
-  console.log(data);
+  const { loading, error, data } = useQuery(GET_USER_POST_COMMENT, {
+    variables: { id: 2 }
+  });
 
   if (loading) {
+    console.log(loading);
     return <p>Loading...</p>;
   }
 
   if (error) {
+    console.log(error);
     return <p>Error...</p>;
   }
+  
+  console.log(data);
 
   return (
     <div className="App">
