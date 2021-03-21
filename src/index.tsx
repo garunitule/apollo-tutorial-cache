@@ -1,8 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {
+  ApolloClient,
+  InMemoryCache,
+} from '@apollo/client';
+import { gql } from '@apollo/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:8000/graphql',
+  cache: new InMemoryCache(),
+});
+
+client
+  .query({
+    query: gql`
+      query user{
+        user(id: 2) {
+          id,
+          name,
+          posts {
+            id,
+            user_id,
+            title,
+            comments {
+              id,
+              post_id,
+              reply,
+            }
+          }
+        }
+      }
+    `
+  })
+  .then(result => console.log(result));
 
 ReactDOM.render(
   <React.StrictMode>
@@ -10,8 +42,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
